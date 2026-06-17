@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThriveHQ Pricing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark-blue:  #1B3664;
+      --light-blue: #5684C4;
+      --dark-grey:  #2D2D2D;
+      --light-grey: #DDDDDD;
+      --font-h: 'Inter', sans-serif;
+      --font-b: 'Montserrat', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-b);
+      font-size: 1rem;
+      color: var(--dark-grey);
+      background: #fff;
+      padding: 3rem 1.5rem;
+    }
+    .wrap { max-width: 700px; margin: 0 auto; }
+
+    h1 {
+      font-family: var(--font-h);
+      color: var(--dark-blue);
+      font-size: 1.6rem;
+      margin-bottom: 0.4rem;
+    }
+    .sub {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Table ── */
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(27,54,100,0.08);
+    }
+
+    /* Column widths */
+    .matrix col.c-feature  { width: 44%; }
+    .matrix col.c-focus    { width: 28%; }
+    .matrix col.c-thrive   { width: 28%; }
+
+    /* Header row */
+    .matrix thead tr th {
+      padding: 1.1rem 1rem;
+      font-family: var(--font-h);
+      font-size: 0.85rem;
+      text-align: center;
+      vertical-align: bottom;
+    }
+    .matrix thead th.c-feature {
+      background: #F7F9FC;
+      text-align: left;
+      color: #999;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .matrix thead th.c-focus {
+      background: #EEF4FC;
+      color: var(--dark-blue);
+      border-bottom: 3px solid var(--light-blue);
+    }
+    .matrix thead th.c-thrive {
+      background: var(--dark-blue);
+      color: #fff;
+      border-bottom: 3px solid #fff;
+    }
+    .matrix thead th .tier-name {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .matrix thead th .tier-price {
+      display: block;
+      font-size: 1.5rem;
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+    .matrix thead th .tier-price span {
+      font-size: 0.85rem;
+      font-family: var(--font-b);
+      font-weight: 400;
+    }
+    .matrix thead th .tier-upfront {
+      display: block;
+      font-size: 0.75rem;
+      opacity: 0.75;
+      font-family: var(--font-b);
+      font-weight: 400;
+      margin-top: 0.3rem;
+    }
+
+    /* Body rows */
+    .matrix tbody tr {
+      border-bottom: 1px solid var(--light-grey);
+    }
+    .matrix tbody tr:last-child { border-bottom: none; }
+    .matrix tbody tr:nth-child(odd)  td { background: #fff; }
+    .matrix tbody tr:nth-child(even) td { background: #FAFBFD; }
+
+    .matrix tbody td {
+      padding: 0.85rem 1rem;
+      font-size: 0.93rem;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .matrix tbody td.c-feature {
+      text-align: left;
+      color: var(--dark-grey);
+      font-size: 0.9rem;
+    }
+    .matrix tbody td.c-thrive {
+      background: #F0F4FB;
+    }
+    .matrix tbody tr:nth-child(even) td.c-thrive {
+      background: #E8EFF9;
+    }
+
+    /* Section divider rows */
+    .matrix tbody tr.section-row td {
+      background: #F0F4FB;
+      font-family: var(--font-h);
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--light-blue);
+      padding: 0.5rem 1rem;
+      text-align: left;
+      border-bottom: none;
+    }
+
+    /* Tick / cross / dash */
+    .yes  { color: var(--light-blue); font-size: 1.1rem; font-weight: 700; }
+    .no   { color: var(--light-grey); font-size: 1.1rem; }
+    .dash { color: #ccc; }
+
+    /* Footer note */
+    .matrix tfoot td {
+      background: var(--dark-blue);
+      color: rgba(255,255,255,0.7);
+      font-size: 0.8rem;
+      padding: 0.85rem 1rem;
+      text-align: center;
+    }
+    .matrix tfoot td strong {
+      color: #fff;
+      font-family: var(--font-h);
+    }
+
+    /* Upgrade note */
+    .upgrade {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #666;
+      text-align: center;
+    }
+    .upgrade strong { color: var(--dark-blue); font-family: var(--font-h); }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--light-grey);
+      font-size: 0.8rem;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <h1>Choose your starting point</h1>
+    <p class="sub">Two memberships. One community. Both are a 6-month commitment.</p>
+
+    <table class="matrix">
+      <colgroup>
+        <col class="c-feature">
+        <col class="c-focus">
+        <col class="c-thrive">
+      </colgroup>
+
+      <thead>
+        <tr>
+          <th class="c-feature"></th>
+          <th class="c-focus">
+            <span class="tier-name">FocusHQ</span>
+            <span class="tier-price">$33<span>/week</span></span>
+            <span class="tier-upfront">or $729 upfront — save $129</span>
+          </th>
+          <th class="c-thrive">
+            <span class="tier-name">ThriveHQ</span>
+            <span class="tier-price">$68<span>/week</span></span>
+            <span class="tier-upfront">or $1,500 upfront — save $268</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr class="section-row">
+          <td colspan="3">Sessions</td>
+        </tr>
+        <tr>
+          <td class="c-feature">Thursday body doubling (12pm AEST, 1 hr)</td>
+          <td class="c-focus"><span class="yes">&#10003;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+        <tr>
+          <td class="c-feature">Flexible peer-hosted sessions</td>
+          <td class="c-focus"><span class="yes">&#10003;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+        <tr>
+          <td class="c-feature">Tuesday coaching with Cath (6pm AEST, 1.5 hrs)</td>
+          <td class="c-focus"><span class="no">&#10005;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+
+        <tr class="section-row">
+          <td colspan="3">Community and support</td>
+        </tr>
+        <tr>
+          <td class="c-feature">Private WhatsApp community</td>
+          <td class="c-focus"><span class="yes">&#10003;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+        <tr>
+          <td class="c-feature">24/7 resource hub</td>
+          <td class="c-focus"><span class="no">&#10005;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+        <tr>
+          <td class="c-feature">20% off 1:1 sessions with Cath</td>
+          <td class="c-focus"><span class="no">&#10005;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+
+        <tr class="section-row">
+          <td colspan="3">Membership</td>
+        </tr>
+        <tr>
+          <td class="c-feature">6-month commitment</td>
+          <td class="c-focus"><span class="yes">&#10003;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+        <tr>
+          <td class="c-feature">Renewable after 6 months</td>
+          <td class="c-focus"><span class="yes">&#10003;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+        <tr>
+          <td class="c-feature">Join at any point in the term</td>
+          <td class="c-focus"><span class="yes">&#10003;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+        <tr>
+          <td class="c-feature">10-week blocks with 2-week breaks</td>
+          <td class="c-focus"><span class="yes">&#10003;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+        <tr>
+          <td class="c-feature">10-week progress promise</td>
+          <td class="c-focus"><span class="no">&#10005;</span></td>
+          <td class="c-thrive"><span class="yes">&#10003;</span></td>
+        </tr>
+
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td colspan="3">All prices GST included &nbsp;|&nbsp; <strong>cath@coach4u.com.au</strong> &nbsp;|&nbsp; Say "I'm in" to get started</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <p class="upgrade">Already in FocusHQ? <strong>Upgrade to ThriveHQ at any time</strong> — just reach out to Cath.</p>
+
+    <div class="page-footer">
+      Strengths-Based Coaching and Counselling | www.coach4u.com.au | cath@coach4u.com.au | 0402 313 337
+    </div>
+
+  </div>
+</body>
+</html>
