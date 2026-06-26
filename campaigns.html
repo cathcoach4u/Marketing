@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campaign Console, Coach4U Marketing Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --dark-blue: #1B3664;
+      --light-blue: #5684C4;
+      --dark-grey: #2D2D2D;
+      --light-grey: #DDDDDD;
+      --bg: #ffffff;
+      --card: #f7f9fc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Montserrat', sans-serif; color: var(--dark-grey); background: var(--bg); font-size: 0.95rem; line-height: 1.6; }
+
+    header { background: var(--dark-blue); padding: 1.4rem 1.25rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    header img { height: 44px; background: #fff; border-radius: 8px; padding: 4px 10px; }
+    header h1 { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.4rem; color: #fff; }
+    header span { color: rgba(255,255,255,0.5); font-size: 0.82rem; }
+    header .who { margin-left: auto; display: flex; align-items: center; gap: 0.7rem; color: rgba(255,255,255,0.8); font-size: 0.82rem; }
+    header .who button { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; color: #fff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); border-radius: 7px; padding: 0.3rem 0.7rem; cursor: pointer; }
+
+    nav { background: #edf1f8; border-bottom: 1px solid var(--light-grey); display: flex; overflow-x: auto; }
+    nav a { padding: 0.75rem 1.1rem; font-size: 0.88rem; font-weight: 500; color: #555; text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; }
+    nav a:hover { color: var(--dark-blue); }
+    nav a.active { color: var(--dark-blue); border-bottom-color: var(--light-blue); font-family: 'Inter', sans-serif; font-weight: 700; }
+
+    main { max-width: 880px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; }
+    section { margin-bottom: 2.25rem; }
+    h2 { font-family: 'Inter', sans-serif; font-weight: 700; color: var(--dark-blue); font-size: 1.05rem; margin-bottom: 0.4rem; padding-bottom: 0.45rem; border-bottom: 2px solid var(--light-grey); display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+    h2 .count { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.78rem; color: var(--light-blue); }
+    .lead { font-size: 0.9rem; color: #666; margin: 0.2rem 0 1rem; }
+
+    /* Login */
+    .login-wrap { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 1.25rem; }
+    .login-card { width: 100%; max-width: 380px; background: #fff; border: 1px solid var(--light-grey); border-radius: 14px; padding: 1.6rem 1.5rem; box-shadow: 0 6px 24px rgba(27,54,100,0.08); }
+    .login-card h2 { border: none; padding: 0; margin-bottom: 0.3rem; display: block; }
+    .login-card p { font-size: 0.86rem; color: #666; margin-bottom: 1.1rem; }
+    .field { margin-bottom: 0.8rem; }
+    .field label { display: block; font-family: 'Inter', sans-serif; font-weight: 700; color: var(--dark-blue); font-size: 0.78rem; margin-bottom: 0.3rem; }
+    input, textarea, select { width: 100%; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: var(--dark-grey); padding: 0.6rem 0.7rem; border: 1px solid var(--light-grey); border-radius: 8px; background: #fff; }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--light-blue); }
+    .btn { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.86rem; border-radius: 8px; padding: 0.6rem 1.1rem; cursor: pointer; border: 1px solid transparent; transition: opacity 0.15s; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--dark-blue); color: #fff; }
+    .btn-secondary { background: #fff; color: var(--dark-blue); border-color: var(--light-grey); }
+    .btn-sm { font-size: 0.78rem; padding: 0.4rem 0.75rem; }
+    .err { color: #b3261e; font-size: 0.82rem; margin-top: 0.6rem; min-height: 1.1rem; }
+
+    /* Cards */
+    .row-card { background: var(--card); border: 1px solid var(--light-grey); border-left: 4px solid var(--light-blue); border-radius: 10px; padding: 0.9rem 1rem; margin-bottom: 0.6rem; }
+    .row-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .row-head h3 { font-family: 'Inter', sans-serif; font-weight: 700; color: var(--dark-blue); font-size: 0.92rem; margin: 0; flex: 1; min-width: 160px; }
+    .row-meta { font-size: 0.8rem; color: #777; margin-top: 0.2rem; }
+    .row-body { font-size: 0.86rem; color: #555; margin-top: 0.45rem; white-space: pre-wrap; }
+    .actions { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.7rem; }
+
+    .pill { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.18rem 0.5rem; border-radius: 999px; color: #fff; }
+    .pill-planning, .pill-draft { background: #94a3b8; }
+    .pill-active, .pill-scheduled { background: var(--light-blue); }
+    .pill-done, .pill-posted { background: #2f7d4f; }
+    .pill-new { background: #c8821f; }
+    .pill-converted { background: #2f7d4f; }
+    .pill-ignored { background: #b0b0b0; }
+
+    .toolbar { display: flex; gap: 0.5rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+    .form-box { background: #fff; border: 1px solid var(--light-grey); border-radius: 12px; padding: 1.1rem 1.15rem; margin-bottom: 1rem; }
+    .empty { font-size: 0.86rem; color: #888; padding: 0.6rem 0; }
+    .banner { background: #eef3fb; border: 1px solid #c5d6ef; border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.84rem; color: var(--dark-grey); margin-bottom: 1rem; }
+    .banner strong { color: var(--dark-blue); font-family: 'Inter', sans-serif; }
+    .hidden { display: none; }
+
+    footer { border-top: 1px solid var(--light-grey); padding: 1.25rem; text-align: center; font-size: 0.8rem; color: #888; }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="Assets/COACH4U%20(Final).jpg" alt="Coach4U">
+  <h1>Campaign Console</h1>
+  <span>Facebook campaigns, posts and leads</span>
+  <div class="who hidden" id="who">
+    <span id="whoEmail"></span>
+    <button id="signOutBtn">Sign out</button>
+  </div>
+</header>
+
+<nav id="nav" class="hidden">
+  <a href="index.html">Dashboard</a>
+  <a href="campaigns.html" class="active">Facebook Campaigns</a>
+  <a href="content.html">Content Pipeline</a>
+  <a href="plan.html">Marketing Plan</a>
+  <a href="ndis-program.html">NDIS Program</a>
+  <a href="google-strategy.html">Google Strategy</a>
+</nav>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <h2>Sign in</h2>
+    <p>This console is private. Sign in with your Coach4U login to manage campaigns, posts and leads.</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-primary" type="submit" id="loginBtn" style="width:100%;">Sign in</button>
+      <div class="err" id="loginErr"></div>
+    </form>
+  </div>
+</div>
+
+<!-- APP -->
+<main id="app" class="hidden">
+
+  <div class="banner">
+    <strong>How this works.</strong> Plan a campaign, draft posts in your voice, then publish to the Page. New lead-form leads appear under Leads, ready to convert. Paid ad placement is still done in Meta Ads Manager against the campaign plan.
+  </div>
+
+  <!-- CAMPAIGNS -->
+  <section>
+    <h2>Campaigns <span class="count" id="campCount"></span></h2>
+    <p class="lead">The plan for each campaign: objective, audience, dates, budget and angles.</p>
+    <div class="toolbar"><button class="btn btn-primary btn-sm" id="addCampBtn">Add campaign</button></div>
+    <div id="campForm"></div>
+    <div id="campList"></div>
+  </section>
+
+  <!-- POSTS -->
+  <section>
+    <h2>Posts <span class="count" id="postCount"></span></h2>
+    <p class="lead">Draft a post, then publish it to the Coach4U Facebook Page.</p>
+    <div class="toolbar"><button class="btn btn-primary btn-sm" id="addPostBtn">Add post</button></div>
+    <div id="postForm"></div>
+    <div id="postList"></div>
+  </section>
+
+  <!-- LEADS -->
+  <section>
+    <h2>Facebook Leads <span class="count" id="leadCount"></span></h2>
+    <p class="lead">Leads captured from Facebook lead forms. Convert qualified ones to prospects in the CRM.</p>
+    <div id="leadList"></div>
+  </section>
+
+</main>
+
+<footer>Strengths-Based Coaching and Counselling | www.coach4u.com.au | cath@coach4u.com.au | 0402 313 337</footer>
+
+<script>
+(function () {
+  // ── Shared backend with the Coach4U CRM (single source of truth) ──────────
+  const SUPABASE_URL = 'https://uoixetfvboevjxlkfyqy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_m3qgSGvWF0n2TePf6vhqMw_9obUvJEJ';
+  const EDGE = SUPABASE_URL + '/functions/v1';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let campaigns = [], posts = [], leads = [];
+  let session = null;
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (x) => (x == null ? '' : String(x)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const escA = (x) => esc(x).replace(/"/g, '&quot;');
+  const fmtDate = (ts) => { if (!ts) return ''; try { return new Date(ts).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ts; } };
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  async function boot() {
+    const { data } = await sb.auth.getSession();
+    session = data.session || null;
+    if (session) showApp(); else showLogin();
+  }
+  function showLogin() {
+    $('loginWrap').classList.remove('hidden');
+    $('app').classList.add('hidden');
+    $('nav').classList.add('hidden');
+    $('who').classList.add('hidden');
+  }
+  async function showApp() {
+    $('loginWrap').classList.add('hidden');
+    $('app').classList.remove('hidden');
+    $('nav').classList.remove('hidden');
+    $('who').classList.remove('hidden');
+    $('whoEmail').textContent = session.user ? session.user.email : '';
+    await loadAll();
+  }
+  $('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = $('loginBtn'); btn.disabled = true; $('loginErr').textContent = '';
+    const { data, error } = await sb.auth.signInWithPassword({ email: $('email').value.trim(), password: $('password').value });
+    btn.disabled = false;
+    if (error) { $('loginErr').textContent = error.message || 'Sign in failed'; return; }
+    session = data.session; showApp();
+  });
+  $('signOutBtn').addEventListener('click', async () => { await sb.auth.signOut(); session = null; showLogin(); });
+
+  // ── Load ─────────────────────────────────────────────────────────────────
+  async function loadAll() {
+    const [c, p, l] = await Promise.all([
+      sb.from('marketing_campaigns').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: false }),
+      sb.from('marketing_posts').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: false }),
+      sb.from('marketing_leads').select('*').order('created_at', { ascending: false })
+    ]);
+    campaigns = c.error ? [] : (c.data || []);
+    posts = p.error ? [] : (p.data || []);
+    leads = l.error ? [] : (l.data || []);
+    renderCampaigns(); renderPosts(); renderLeads();
+  }
+
+  // ── Campaigns ──────────────────────────────────────────────────────────────
+  function renderCampaigns() {
+    $('campCount').textContent = campaigns.length ? campaigns.length + ' total' : '';
+    if (!campaigns.length) { $('campList').innerHTML = '<div class="empty">No campaigns yet. Add your first one above.</div>'; return; }
+    $('campList').innerHTML = campaigns.map((c) => {
+      const st = (c.status || 'planning');
+      return '<div class="row-card">'
+        + '<div class="row-head"><h3>' + esc(c.name || 'Untitled campaign') + '</h3><span class="pill pill-' + st + '">' + esc(st) + '</span></div>'
+        + (c.objective ? '<div class="row-meta">' + esc(c.objective) + '</div>' : '')
+        + (c.body ? '<div class="row-body">' + esc(c.body) + '</div>' : '')
+        + '<div class="actions">'
+        + '<button class="btn btn-secondary btn-sm" data-edit-camp="' + c.id + '">Edit</button>'
+        + '<button class="btn btn-secondary btn-sm" data-del-camp="' + c.id + '">Delete</button>'
+        + '</div></div>';
+    }).join('');
+  }
+  function campFormHTML(c) {
+    c = c || {};
+    return '<div class="form-box">'
+      + '<div class="field"><label>Campaign name</label><input id="cf_name" value="' + escA(c.name) + '" placeholder="e.g. ThriveHQ Term 3 awareness"></div>'
+      + '<div class="field"><label>Objective</label><input id="cf_obj" value="' + escA(c.objective) + '" placeholder="One goal: awareness, lead sign-ups, calls booked"></div>'
+      + '<div class="field"><label>Status</label><select id="cf_status">'
+      + ['planning', 'active', 'done'].map((s) => '<option value="' + s + '"' + ((c.status || 'planning') === s ? ' selected' : '') + '>' + s + '</option>').join('')
+      + '</select></div>'
+      + '<div class="field"><label>Plan</label><textarea id="cf_body" placeholder="Audience, dates, budget, creative angles, the call to action and how you will measure it.">' + esc(c.body) + '</textarea></div>'
+      + '<div class="actions"><button class="btn btn-primary btn-sm" id="cf_save">Save</button><button class="btn btn-secondary btn-sm" id="cf_cancel">Cancel</button><div class="err" id="cf_err"></div></div>'
+      + '</div>';
+  }
+  function openCampForm(c) {
+    $('campForm').innerHTML = campFormHTML(c);
+    $('cf_cancel').onclick = () => { $('campForm').innerHTML = ''; };
+    $('cf_save').onclick = async () => {
+      const rec = { name: $('cf_name').value.trim(), objective: $('cf_obj').value.trim(), status: $('cf_status').value, body: $('cf_body').value };
+      if (!rec.name) { $('cf_err').textContent = 'A name is needed.'; return; }
+      let res;
+      if (c && c.id) res = await sb.from('marketing_campaigns').update(rec).eq('id', c.id);
+      else res = await sb.from('marketing_campaigns').insert(rec);
+      if (res.error) { $('cf_err').textContent = res.error.message; return; }
+      $('campForm').innerHTML = ''; await loadAll();
+    };
+  }
+  $('addCampBtn').onclick = () => openCampForm(null);
+  $('campList').addEventListener('click', async (e) => {
+    const ed = e.target.getAttribute('data-edit-camp'); const dl = e.target.getAttribute('data-del-camp');
+    if (ed) openCampForm(campaigns.find((x) => x.id === ed));
+    if (dl) { if (!confirm('Delete this campaign?')) return; await sb.from('marketing_campaigns').delete().eq('id', dl); await loadAll(); }
+  });
+
+  // ── Posts ──────────────────────────────────────────────────────────────────
+  function renderPosts() {
+    $('postCount').textContent = posts.length ? posts.length + ' total' : '';
+    if (!posts.length) { $('postList').innerHTML = '<div class="empty">No posts yet. Draft one above.</div>'; return; }
+    $('postList').innerHTML = posts.map((p) => {
+      const st = (p.status || 'draft');
+      const canPublish = st !== 'posted';
+      return '<div class="row-card">'
+        + '<div class="row-head"><h3>' + esc(p.title || 'Untitled post') + '</h3><span class="pill pill-' + st + '">' + esc(st) + '</span></div>'
+        + (p.body ? '<div class="row-body">' + esc(p.body) + '</div>' : '')
+        + (p.link_url ? '<div class="row-meta">Link: ' + esc(p.link_url) + '</div>' : '')
+        + (p.posted_at ? '<div class="row-meta">Posted ' + fmtDate(p.posted_at) + (p.external_id ? ' · id ' + esc(p.external_id) : '') + '</div>' : '')
+        + '<div class="actions">'
+        + (canPublish ? '<button class="btn btn-primary btn-sm" data-pub-post="' + p.id + '">Publish to Facebook</button>' : '')
+        + '<button class="btn btn-secondary btn-sm" data-edit-post="' + p.id + '">Edit</button>'
+        + '<button class="btn btn-secondary btn-sm" data-del-post="' + p.id + '">Delete</button>'
+        + '<span class="err" data-pub-err="' + p.id + '"></span>'
+        + '</div></div>';
+    }).join('');
+  }
+  function postFormHTML(p) {
+    p = p || {};
+    return '<div class="form-box">'
+      + '<div class="field"><label>Title (internal)</label><input id="pf_title" value="' + escA(p.title) + '" placeholder="A short name for this post"></div>'
+      + '<div class="field"><label>Post text</label><textarea id="pf_body" placeholder="Write it in your voice. Australian English, warm, strengths-based.">' + esc(p.body) + '</textarea></div>'
+      + '<div class="field"><label>Link (optional)</label><input id="pf_link" value="' + escA(p.link_url) + '" placeholder="https://"></div>'
+      + '<div class="field"><label>Image URL (optional)</label><input id="pf_img" value="' + escA(p.image_url) + '" placeholder="https:// a public image URL"></div>'
+      + '<div class="field"><label>Status</label><select id="pf_status">'
+      + ['draft', 'scheduled', 'posted'].map((s) => '<option value="' + s + '"' + ((p.status || 'draft') === s ? ' selected' : '') + '>' + s + '</option>').join('')
+      + '</select></div>'
+      + '<div class="actions"><button class="btn btn-primary btn-sm" id="pf_save">Save</button><button class="btn btn-secondary btn-sm" id="pf_cancel">Cancel</button><div class="err" id="pf_err"></div></div>'
+      + '</div>';
+  }
+  function openPostForm(p) {
+    $('postForm').innerHTML = postFormHTML(p);
+    $('pf_cancel').onclick = () => { $('postForm').innerHTML = ''; };
+    $('pf_save').onclick = async () => {
+      const rec = { title: $('pf_title').value.trim(), body: $('pf_body').value, link_url: $('pf_link').value.trim() || null, image_url: $('pf_img').value.trim() || null, status: $('pf_status').value, channel: 'facebook' };
+      if (!rec.body && !rec.link_url && !rec.image_url) { $('pf_err').textContent = 'Add some text, a link or an image.'; return; }
+      let res;
+      if (p && p.id) res = await sb.from('marketing_posts').update(rec).eq('id', p.id);
+      else res = await sb.from('marketing_posts').insert(rec);
+      if (res.error) { $('pf_err').textContent = res.error.message; return; }
+      $('postForm').innerHTML = ''; await loadAll();
+    };
+  }
+  $('addPostBtn').onclick = () => openPostForm(null);
+  $('postList').addEventListener('click', async (e) => {
+    const ed = e.target.getAttribute('data-edit-post'); const dl = e.target.getAttribute('data-del-post'); const pub = e.target.getAttribute('data-pub-post');
+    if (ed) openPostForm(posts.find((x) => x.id === ed));
+    if (dl) { if (!confirm('Delete this post?')) return; await sb.from('marketing_posts').delete().eq('id', dl); await loadAll(); }
+    if (pub) await publishPost(pub, e.target);
+  });
+  async function publishPost(id, btn) {
+    const p = posts.find((x) => x.id === id); if (!p) return;
+    const errEl = document.querySelector('[data-pub-err="' + id + '"]');
+    if (!confirm('Publish this post to the Coach4U Facebook Page now?')) return;
+    btn.disabled = true; btn.textContent = 'Publishing...'; if (errEl) errEl.textContent = '';
+    try {
+      const r = await fetch(EDGE + '/meta-facebook', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + session.access_token, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: p.body || '', link: p.link_url || undefined, image_url: p.image_url || undefined })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || !d.ok) { if (errEl) errEl.textContent = (d && d.error) || ('HTTP ' + r.status); btn.disabled = false; btn.textContent = 'Publish to Facebook'; return; }
+      await sb.from('marketing_posts').update({ status: 'posted', posted_at: new Date().toISOString(), external_id: d.id || null }).eq('id', id);
+      await loadAll();
+    } catch (e) {
+      if (errEl) errEl.textContent = String(e && e.message || e); btn.disabled = false; btn.textContent = 'Publish to Facebook';
+    }
+  }
+
+  // ── Leads ──────────────────────────────────────────────────────────────────
+  function renderLeads() {
+    $('leadCount').textContent = leads.length ? leads.length + ' total' : '';
+    if (!leads.length) { $('leadList').innerHTML = '<div class="empty">No leads yet. They appear here once a Facebook lead form is connected and submitted.</div>'; return; }
+    $('leadList').innerHTML = leads.map((l) => {
+      const st = (l.status || 'new').toLowerCase();
+      return '<div class="row-card">'
+        + '<div class="row-head"><h3>' + esc(l.full_name || l.name || 'Lead') + '</h3><span class="pill pill-' + st + '">' + esc(l.status || 'New') + '</span></div>'
+        + '<div class="row-meta">'
+        + [l.email, l.phone, l.campaign].filter(Boolean).map(esc).join(' · ')
+        + (l.created_at ? ' · ' + fmtDate(l.created_at) : '')
+        + '</div></div>';
+    }).join('');
+  }
+
+  // ── Go ──────────────────────────────────────────────────────────────────────
+  boot();
+})();
+</script>
+
+</body>
+</html>
