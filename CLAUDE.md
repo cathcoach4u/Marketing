@@ -6,7 +6,7 @@ This file gives Claude the context it needs to produce high-quality outputs for 
 
 ## Who I am
 
-I'm Cath Baker. I run **Coach4U** — a strengths-based coaching and counselling practice (NOT a psychology practice) under SARUBA Pty Ltd, Sydney. I serve couples and individuals using evidence-based approaches: EFT, Gottman, Imago, Transactional Analysis, Narrative Therapy, Solution-Focused Therapy, and Gallup CliftonStrengths. I'm a Gallup-certified CliftonStrengths coach.
+I'm Cath Baker. I run **Coach4U** — a strengths-based coaching and counselling practice (NOT a psychology practice) under SARUBA Pty Ltd, Sydney. I serve couples and individuals using evidence-based approaches: EFT, Gottman, Imago, Narrative Therapy, Solution-Focused Therapy, Positive Psychology, and Gallup CliftonStrengths. I'm a Gallup-certified CliftonStrengths coach.
 
 Other entities under SARUBA: **Coaching with Cath** (secondary brand for payments and personal calendar/email), **ThriveHQ** (ADHD group coaching membership), **ABMS Marketing** (Andrew's business). My key client is **IAS** (Insurance, Superannuation and Financial Advisors) — Microsoft 365 efficiency and Power Platform builds.
 
